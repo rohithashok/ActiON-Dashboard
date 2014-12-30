@@ -34,6 +34,9 @@ body {background-color: #1d1d1d!important;}
 .w2 {width: 240px;}
 .h2 {height:240px;}
 
+.w4 {width: 480px;}
+.h4 {height:480px;}
+
 /* reset ***********************/
 body, .ui-page{background-color:black!important;}
 * {text-shadow:none;font-family:"Mallanna",Verdana,Arial,Helvetica,sans-serif}
