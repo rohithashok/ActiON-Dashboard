@@ -43,6 +43,11 @@ preferences {
 			href "links", title:"Configure shortcuts"
 		}
 		
+		section("iframes...") {
+			href "iframes", title:"Configure iframes"
+		}
+
+		
 		section("More Tiles and Preferences...") {
 			href "moreTiles", title:"Hello, Home!, Mode, Clock, Title, etc"
 		}
@@ -102,6 +107,21 @@ def videoStreams() {
 			def title = "dropcamStreamT$it"
 			def link = "dropcamStreamUrl$it"
 			section("Dropcam Video Stream $it") {
+				input title, "text", title:"Title", required: false
+				input link, "text", title:"URL", required: false
+			}
+		}
+	}
+}
+
+
+def iframes() {	
+	dynamicPage(name: "iframes", title: "iframes", install:false) {
+		(1..10).each{
+			def title = "iframeTitle$it"
+			def link = "iframeUrl$it"
+			log.debug "t: $t, l: $l"
+			section("Link $it") {
 				input title, "text", title:"Title", required: false
 				input link, "text", title:"URL", required: false
 			}
@@ -433,6 +453,8 @@ def renderTile(data) {
 		return """<div class="link tile" data-link-i="$data.i"><div class="title">$data.title</div><div class="icon"><a href="$data.link" data-ajax="false" style="color:white"><i class="fa fa-link"></i></a></div></div>"""
 	} else if (data.tile == "video") {
 		return """<div class="video tile h2 w2" data-link-i="$data.i"><div class="title">$data.title</div><div class="icon" style="margin-top:-82px;"><object width="240" height="164"><param name="movie" value="$data.link"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><param name="wmode" value="opaque"></param><embed src="$data.link" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="240" height="164" wmode="opaque"></embed></object></div></div>"""
+	} else if (data.tile == "iframe") {
+		return """<div class="link tile h4 w4"  data-link-i="$data.i"><div class="title">$data.title</div><div class=""><iframe class="h4 w4" src="$data.link"></iframe></div></div>"""
 	} else if (data.tile == "refresh") {
 		return """<div class="refresh tile clickable"><div class="title">Refresh</div><div class="footer">Updated $data.ts</div></div>"""
 	} else if (data.tile == "mode") {
@@ -531,7 +553,8 @@ def allDeviceData() {
 	battery?.each{data << getDeviceData(it, "battery")}
 	
 	(1..10).each{if (settings["linkUrl$it"]) {data << [tile: "link", link: settings["linkUrl$it"], title: settings["linkTitle$it"] ?: "Link $it", i: it]}}
-	
+	(1..10).each{if (settings["iframeUrl$it"]) {data << [tile: "iframe", link: settings["iframeUrl$it"], title: settings["iframeTitle$it"] ?: "Link $it", i: it]}}
+
 	data << [tile: "refresh", ts: getTS()]
 	
 	data
